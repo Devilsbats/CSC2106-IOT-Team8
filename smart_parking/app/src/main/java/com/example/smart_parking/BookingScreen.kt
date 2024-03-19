@@ -1,10 +1,12 @@
 package com.example.smart_parking
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -38,7 +41,7 @@ import com.example.smart_parking.ui.theme.Smart_parkingTheme
 
 //Joo Wee
 fun carParkList(): List<String> {
-    return (1..6).map { "a$it" }
+    return (1..6).map { "A$it" }
 }
 @Composable
 fun BookingScreen(
@@ -57,16 +60,34 @@ fun BookingScreen(
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LazyColumn {
-                items(carParkList.size) { index ->
-                    var isTaken by remember { mutableStateOf(true) }
+        Text(
+            text = "Welcome, ${userName.value}. \nPlease select a car park slot to book.",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Divider(
+            modifier = Modifier
+                .border(1.dp, Color.Black)
+        )
+        LazyColumn {
+            items(carParkList.size) { index ->
+                var isTaken by remember { mutableStateOf(true) }
+                Row {
+                    Column(){
+                        Text(
+                            text = "Car park slot ${carParkList[index]}",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(
+                            //Joo Wee add here
+                            text = "Temperature: ",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
                     Button(
+                        modifier = Modifier.fillMaxSize(0.5f),
                         onClick = {
                             navController.navigate(Screen.ConfirmScreen.route)
                             bookingLocation.value = carParkList[index]
@@ -75,18 +96,26 @@ fun BookingScreen(
                         },
                         enabled = isTaken,
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.White,
-                            containerColor = Color.Blue
-                        ),
-                        modifier = Modifier
-                            .then(if (isTaken) Modifier.fillMaxWidth() else Modifier.fillMaxWidth(0.5f))
-
+                            contentColor = Color.Black,
+                            containerColor = Color.Green
+                        )
                     ) {
-                        Text(text = "Book car park slot ${carParkList[index]}")
+                        Text(text = "Book")
                     }
                 }
+                Divider(
+                    modifier = Modifier
+                        .border(1.dp, Color.Black)
+                )
             }
         }
+        Image(
+            modifier = Modifier
+                .size(600.dp)
+                .align(Alignment.CenterHorizontally),
+            painter = painterResource(R.drawable.carpark),
+            contentDescription = null,
+        )
     }
 }
 
