@@ -5,14 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -26,25 +25,32 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.isSuccess
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainApp()
+            HomeScreen()
+            //MainApp()
         }
     }
 }
 
-suspend fun getData() : Data? {
+suspend fun getData(): List<Data>? {
     val client = HttpClient(CIO)
-    var responseData: Data? = null
+    var responseData: List<Data>? = null
     try {
         val response: HttpResponse = client.get("http://10.0.2.2:5000/data")
         if (response.status.isSuccess()) {
             val jsonString = response.bodyAsText()
-            responseData = Gson().fromJson(jsonString, Data::class.java)
+            val locationsJson = JSONObject(jsonString).getJSONArray("locations")
+            val gson = Gson()
+            responseData = List(locationsJson.length()) { index ->
+                gson.fromJson(locationsJson.getJSONObject(index).toString(), Data::class.java)
+            }
         }
     } catch (e: Exception) {
         println("Client Error: ${e.message}")
@@ -55,28 +61,36 @@ suspend fun getData() : Data? {
 }
 
 data class Data(
-    val temperature: Double,
-    val distance: Double,
+    val location: String,
+    val available_slots: Int,
+    val avg_temperature: Double
 )
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    var data by rememberSaveable { mutableStateOf<Data?>(null) }
-    val scope = rememberCoroutineScope()
+    var dataList by rememberSaveable { mutableStateOf<List<Data>?>(null) }
+
+    LaunchedEffect(Unit) {
+        val dataFlow = flow {
+            while (true) {
+                emit(getData())
+                delay(5000)
+            }
+        }
+
+        dataFlow.collect { newData ->
+            dataList = newData
+        }
+    }
 
     Column {
-        data?.let { dataItem ->
-            Text(text = "Temperature: ${dataItem.temperature}, Distance: ${dataItem.distance}")
-        }
-        Button(
-            onClick = {
-                scope.launch {
-                    data = getData()
-                }
+        dataList?.let { data ->
+            data.forEach { dataItem ->
+                Text(
+                    text = "Location: ${dataItem.location}, Temperature: ${dataItem.avg_temperature}°C, Available Slots: ${dataItem.available_slots}"
+                )
             }
-        ) {
-            Text(text = "Fetch Data")
-        }
+        } ?: Text("No data available")
     }
 }
 
