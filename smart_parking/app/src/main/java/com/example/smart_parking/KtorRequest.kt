@@ -35,3 +35,7 @@ suspend fun getBedokData(): Data? {
 suspend fun getOtherData(): Data? {
     return getLocationData(locationLink.other)
 }
+
+suspend fun getPasirRisData(): Data? {
+    return getLocationData(locationLink.pasirRis)
+}

@@ -1,12 +1,14 @@
 package com.example.smart_parking
 
 data class Data(
-    val location: String,
-    val available_slots: Int,
-    val avg_temperature: Double
+    var location: String,
+    var available_slots: Int,
+    var avg_temperature: Double
 )
 
 object locationLink {
-    val bedok = "https://fnstora5jkqhp2eayio.blob.core.windows.net/azure-webjobs-hosts/location/Bedok/0_23a8a13336514a70b54215f63992abd9_1.json?sp=r&st=2024-03-26T04:04:19Z&se=2024-03-26T12:04:19Z&spr=https&sv=2022-11-02&sr=b&sig=6Y6rdP4z8wnvnk2ENQCA7p61R%2B%2B%2FegQxUls3Xj7S5Rw%3D"
-    val other = "https://fnstora5jkqhp2eayio.blob.core.windows.net/azure-webjobs-hosts/location/Other/0_e767acfd71974996b722df9a3ae5a280_1.json?sp=r&st=2024-03-26T04:06:40Z&se=2024-03-26T12:06:40Z&spr=https&sv=2022-11-02&sr=b&sig=HfyFG4VwenrGKgcpb7qgdME4eJbYQXUrx8JKhpgD2Ak%3D"
+    val bedok = "\n" +
+            "https://fnstora5jkqhp2eayio.blob.core.windows.net/azure-webjobs-hosts/location/Bedok/0_589aa38ea50b4731bf2b3c0e866076bd_1.json?sp=r&st=2024-03-28T13:51:11Z&se=2024-03-28T21:51:11Z&spr=https&sv=2022-11-02&sr=b&sig=0G6ZoHtZLUIz3%2F2iLOBUbL32%2BneSi4kdzckEs8%2FF2fU%3D"
+    val other = ""
+    val pasirRis = "https://fnstora5jkqhp2eayio.blob.core.windows.net/azure-webjobs-hosts/location/Pasir%2520Ris/0_fc4998ca9f26412d8b209dcb21ee629d_1.json?sp=r&st=2024-03-28T17:30:15Z&se=2024-03-29T01:30:15Z&spr=https&sv=2022-11-02&sr=b&sig=9eX2WTGwLLx3%2F2UrDMnvkvalfJTcHbHlW2JjmorWf4s%3D"
 }

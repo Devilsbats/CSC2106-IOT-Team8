@@ -28,6 +28,8 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen(modifier: Modifier = Modifier) {
     var bedokData by rememberSaveable { mutableStateOf<Data?>(null) }
     var otherData by rememberSaveable { mutableStateOf<Data?>(null) }
+    val hardCode = Data("Pasir Ris", 1, 30.0)
+
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -40,13 +42,13 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 
     LaunchedEffect(Unit) {
-        while (true) {
-            val newOtherData = getOtherData()
-            if (newOtherData != null) {
-                otherData = newOtherData
-            }
-            delay(5000)
-        }
+//        while (true) {
+//            val newOtherData = getPasirRisData()
+//            if (newOtherData != null) {
+//                otherData = newOtherData
+//            }
+            otherData = hardCode
+//        }
     }
     Column(
         modifier = modifier.padding(8.dp)
