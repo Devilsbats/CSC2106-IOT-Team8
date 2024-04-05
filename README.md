@@ -1,1 +1,1 @@
-# CSC2106-IOT-Team8-
+# CSC2106-IOT-Team8-ParkEase
