@@ -9,9 +9,9 @@ we were recommended to implement 2 LoRa Networks, LoRaWAN and LoRa Mesh to deter
 
 ## LoRaWAN
 In the LoRaWAN file, it contains the LoRaWAN Folder <br>
-&emsp; |__LoRaWAN Code for Maker UNO <br>
-&emsp; |__Painless Mesh Folder configured for LoRaWAN <br>
-&emsp;&emsp; |__"Central" Node code for M5StickCPlus connecting to LoRA Module <br>
-&emsp;&emsp; |__Node
+&emsp; |_LoRaWAN Code for Maker UNO <br>
+&emsp; |_Painless Mesh Folder configured for LoRaWAN <br>
+&emsp;&emsp; |_"Central" Node code for M5StickCPlus connecting to LoRA Module <br>
+&emsp;&emsp; |_Node
           
       
