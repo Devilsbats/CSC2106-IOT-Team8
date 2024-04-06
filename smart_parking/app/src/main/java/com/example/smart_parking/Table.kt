@@ -42,7 +42,7 @@ fun TableRow(dataItem: Data?) {
     ) {
         if (dataItem != null) {
             TableCell(text = dataItem.location, modifier = Modifier.weight(1f))
-            TableCell(text = String.format("%.1f", dataItem.avg_temperature), modifier = Modifier.weight(1f))
+            TableCell(text = String.format("%.1f", dataItem.temperature), modifier = Modifier.weight(1f))
             TableCell(text = "${dataItem.available_slots}", modifier = Modifier.weight(1f))
         } else {
             TableCell(text = "Loading...", modifier = Modifier.weight(1f))
