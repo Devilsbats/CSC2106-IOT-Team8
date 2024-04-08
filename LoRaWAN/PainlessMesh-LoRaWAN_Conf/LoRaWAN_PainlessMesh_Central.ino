@@ -65,9 +65,6 @@ void setupMesh(){
   mesh.onChangedConnections(&changedConnectionCallback);
   mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
   mesh.onNodeDelayReceived(&delayReceivedCallback);
-
-  //userScheduler.addTask(taskSendMessage);
-  //taskSendMessage.enable();
 }
 
 void lcdReset(){
@@ -83,7 +80,6 @@ void setup() {
   dht.begin();
   M5.begin();
   lcdReset();
-  // Serial1.begin(115200, SERIAL_8N1, SERIAL_RX, SERIAL_TX);
   setUpUltrasonic(TRIG, ECHO);
   setupMesh();
 }
@@ -110,13 +106,6 @@ float getTemperature() {
 }
 
 void loop() {
-  // int distance = getDistance(TRIG, ECHO);
-  // float temperature = getTemperature();
-  
-  // String data = "Distance: " + String(distance) + " cm, Temperature: " + String(temperature) + " Â°C";
-  // Serial.println(data);
-  // Serial1.write(data.c_str());
-
   mesh.update();
 
   unsigned long now = millis();  // Obtain the host startup duration.  
@@ -126,36 +115,7 @@ void loop() {
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.setCursor(0, 0);
   }
-  //delay(500);
 }
-
-/*
-void sendMessage() {
-  const size_t CAPACITY = JSON_OBJECT_SIZE(3);
-  StaticJsonDocument<CAPACITY> doc;
-
-  JsonDocument customMsg = doc.to<JsonObject>();
-  customMsg["node"] = mesh.getNodeId();
-  customMsg["distance"] = 20;
-  customMsg["temperature"] = 30.3;
-  String msg;
-  serializeJson(customMsg, msg);
-
-  mesh.sendBroadcast(msg);
-
-  if (calc_delay) {
-    SimpleList<uint32_t>::iterator node = nodes.begin();
-    while (node != nodes.end()) {
-      mesh.startDelayMeas(*node);
-      node++;
-    }
-    calc_delay = false;
-  }
-  Serial.printf("Sending message: %s\n", msg.c_str());
-
-  taskSendMessage.setInterval(random(TASK_SECOND * 3, TASK_SECOND * 5));  // between 1 and 5 seconds
-}
-*/
 
 void sendOwnMessage() {
   const size_t CAPACITY = JSON_OBJECT_SIZE(3);
@@ -168,21 +128,6 @@ void sendOwnMessage() {
 
   snprintf(newMsg, sizeof(newMsg), "%d, %d", distance, m5ID);
   Serial1.println(newMsg);
-  //Reset count and sum;
-  //count = 0;
-  //sum = 0;
-
-  
-
-  //String msg;
-  //serializeJson(customMsg, msg);
-
-  // Send own M5StickCentral info to LoRa
-  // Serial.println("My Measurements JSON: ");
-  // Serial.println(msg);
-  //Serial1.print(msg + '!');
-
-  //mesh.sendBroadcast(msg);
 
   if (calc_delay) {
     SimpleList<uint32_t>::iterator node = nodes.begin();
@@ -214,24 +159,11 @@ void receivedCallback(uint32_t from, String &msg) {
   snprintf(newMsg, sizeof(newMsg), "%d, %d, %.1f", distance, targetId, temperature);
   Serial.println(newMsg);
   Serial1.println(newMsg);
-  // Serial.println("OTHER MESH DATA");
-  // Serial.println(targetId);
-  // Serial.println(distance);
-  // Serial.println(temperature);
-
   sendOwnMessage();
-  /*
-  if(count<2){
-    sum+=temperature;
-    count++;
-    sendOwnMessage();
-  }
-  */
 }
 
 void newConnectionCallback(uint32_t nodeId) {
   Serial.printf("--> startHere: New Connection, nodeId = %u\n", nodeId);
-  //Serial.printf("--> startHere: New Connection, %s\n", mesh.subConnectionJson(true).c_str());
 }
 
 void changedConnectionCallback() {

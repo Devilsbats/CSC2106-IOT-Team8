@@ -310,7 +310,6 @@ void setup() {
     Serial.println(F("Starting"));
 
     dht.begin();
-    //-----------------------------
     
     #ifdef VCC_ENABLE
     // For Pinoccio Scout boards
@@ -333,22 +332,6 @@ void setup() {
 }
 
 void loop() {
-  /*
- if (mySerial.available() > 0) {
-    byte payload[4];
-    if (mySerial.readBytes(payload, sizeof(payload)) == sizeof(payload)) {
-      // Convert received bytes back to distance and temperature
-      int distance = (highByte(payload[0]) << 8) | lowByte(payload[1]);
-      int tempInt = (highByte(payload[2]) << 8) | lowByte(payload[3]);
-      float temperature = tempInt / 100.0; // Divide by 100 to get the original value
-
-      Serial.print("Received Distance: ");
-      Serial.print(distance);
-      Serial.print(" cm, Temperature: ");
-      Serial.print(temperature);
-      Serial.println(" °C");
-    }
- }*/
   if (mySerial.available() > 0) {
       incomingData = mySerial.readStringUntil('\n'); // Read until newline character
       Serial.println(incomingData);
@@ -388,9 +371,6 @@ void loop() {
               Serial.println(truncatedtemperature);
               M5ID =  M5IDStr.toInt(); // Assuming the third value is an integer
 
-
-              /* 4 is mininum width, 2 is precision; float value is copied onto str_temp*/
-              // dtostrf(temperature, 4, 2, str_temp);
               commastate = false;
               togglenontemp = false;
 
