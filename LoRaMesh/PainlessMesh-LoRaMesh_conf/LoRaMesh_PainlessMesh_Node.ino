@@ -77,7 +77,6 @@ void setup() {
   dht.begin();
   M5.begin();
   lcdReset();
-  // Serial1.begin(115200, SERIAL_8N1, SERIAL_RX, SERIAL_TX);
   setUpUltrasonic(TRIG, ECHO);
   setupMesh();
 }
@@ -104,13 +103,6 @@ float getTemperature() {
 }
 
 void loop() {
-  // int distance = getDistance(TRIG, ECHO);
-  // float temperature = getTemperature();
-  
-  // String data = "Distance: " + String(distance) + " cm, Temperature: " + String(temperature) + " Â°C";
-  // Serial.println(data);
-  // Serial1.write(data.c_str());
-
   mesh.update();
 
   unsigned long now = millis();  // Obtain the host startup duration.  
@@ -120,7 +112,6 @@ void loop() {
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.setCursor(0, 0);
   }
-  // delay(2000);
 }
 
 void sendMessage() {
@@ -149,13 +140,10 @@ void sendMessage() {
   taskSendMessage.setInterval(random(TASK_SECOND * 3, TASK_SECOND * 5));  // between 1 and 5 seconds
 }
 
-
+// Received through UART to LoRa
 void receivedCallback(uint32_t from, String &msg) {
   Serial.printf("startHere: Received from %u msg=%s\n", from, msg.c_str());
   String msgObject = msg.c_str();
-
-  // Transfer through UART to LoRa
-  // Serial1.println(msgObject);
 
   const size_t CAPACITY = JSON_OBJECT_SIZE(3);
   StaticJsonDocument<CAPACITY> doc;

@@ -143,7 +143,7 @@ void loop() {
   }
 
 
-  //Opening my port publicly
+  //Opening my "port" publicly
   if (rf95.available()) {  
       uint8_t buf[sizeof(Message)]; //Message receive from all the strangers
       uint8_t len = sizeof(buf); 
@@ -152,10 +152,6 @@ void loop() {
 
         Message* msg = (Message*)buf;
 
-        //Data Processing - Display message from other nodes
-        // Serial.print("Our Packet: ");
-        // Serial.println(msg->networkId == NETWORK_ID);
-
         // Process the message
         processMessage(msg);
 
@@ -163,11 +159,6 @@ void loop() {
         Serial.println("Receive failed");
       }
  }
-
-//  // Periodically send a message
-//  if (millis() % 10000 == 0) {
-//     sendMessage();
-//  }
 }
 
 void processMessage(Message* msg) {
@@ -177,18 +168,15 @@ void processMessage(Message* msg) {
     // Decrement TTL and check if the message should be forwarded
     if (msg->ttl > 0) {
         msg->ttl--; //Decrement TTL then forward
-        // Update routing table with the source node as a direct neighbor
-        // This step is crucial for dynamic routing table updates
-        //updateRoutingTable(msg->nodeId, nodeId); // Assuming the current node is the next hop for the source node
-        // Forward the message
 
+        // Forward the message
         sendMessage(msg);
     }
   }
 }
 
 void sendMessage(Message* msg) {
-  // Construct a message and send to other node**********************************************************************************************
+  // Construct a message and send to other node
   Message newMsg;
 
   //New Message
@@ -228,11 +216,6 @@ void sendMessage(Message* msg) {
   rf95.waitPacketSent();
 
   Serial.println("Message Sent");
-
-  //Serial.println(nextHop);
-
- //**************************************************************************
-
 }
 
 //no need checksum

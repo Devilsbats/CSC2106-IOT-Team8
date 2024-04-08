@@ -144,10 +144,6 @@ void absorbMessage(Message* msg)
       Serial.println("New Entry Found:");
       Serial.print("Node ID: ");
       Serial.println(msg->nodeId);
-      // Serial.print("Latest Timestamp: ");
-      // Serial.println(msg->timestamp);
-      // Serial.print("Data: ");
-      // Serial.println(msg->data);
       Serial.println("");
     }
 
@@ -192,8 +188,7 @@ void loop() {
  }
 }
 
-
-//no need checksum
+//Checksum
 uint16_t calculateCRC(const char* data, size_t length) {
   uint16_t crc = 0xFFFF; // Initial value (Key)
   
